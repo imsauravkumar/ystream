@@ -82,7 +82,7 @@ export default function Home() {
         </div>
       </nav>
 
-      <section className="mx-auto flex min-h-[calc(100vh-6rem)] max-w-6xl flex-col justify-center gap-5 py-8">
+      <section className="mx-auto flex min-h-[calc(100vh-8rem)] max-w-6xl flex-col justify-start gap-5 py-6 sm:py-8">
         <div className="overflow-hidden rounded-xl border border-zinc-800 bg-panel/90 shadow-glow">
           <div className="grid gap-5 p-5 sm:p-6 lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-center">
             <div className="min-w-0 space-y-2">
