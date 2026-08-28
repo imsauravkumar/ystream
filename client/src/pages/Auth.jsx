@@ -196,7 +196,9 @@ export default function Auth() {
           </div>
         </div>
       </section>
-      <CopyrightBadge />
+      <div className="mt-8 flex justify-center pb-4">
+        <CopyrightBadge />
+      </div>
     </main>
   );
 }
