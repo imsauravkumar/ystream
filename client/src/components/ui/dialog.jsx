@@ -43,7 +43,7 @@ export function DialogOverlay({ className = "", ...props }) {
 }
 
 export function DialogContent({ className = "", children, ...props }) {
-  const { onOpenChange, titleId, descriptionId } = useDialogContext("DialogContent");
+  const { open, onOpenChange, titleId, descriptionId } = useDialogContext("DialogContent");
 
   useEffect(() => {
     function onKeyDown(event) {
@@ -55,12 +55,13 @@ export function DialogContent({ className = "", children, ...props }) {
   }, [onOpenChange]);
 
   useEffect(() => {
+    if (!open) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = previousOverflow;
     };
-  }, []);
+  }, [open]);
 
   return (
     <DialogPortal>
