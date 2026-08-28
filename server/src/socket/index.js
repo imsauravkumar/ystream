@@ -136,7 +136,11 @@ export function createSocketServer(httpServer) {
         setActiveUser(code, socket.id, user);
         await updateParticipant(room, socket.id, user);
 
-        emitRoomState(io, code, room);
+        socket.emit("room-state", {
+          room,
+          users: getActiveUsers(code)
+        });
+        socket.to(code).emit("users-update", getActiveUsers(code));
         callback?.({ ok: true, room });
       } catch (error) {
         callback?.({ ok: false, message: error.message });

@@ -12,6 +12,7 @@ function formatTime(seconds) {
 
 export default function YouTubePlayer({ currentVideo, playback, canControl, canAutoAdvance, onLocalEvent, onPrevious, onNext, onPlayerReady }) {
   const loadedVideoIdRef = useRef(null);
+  const lastSeekTimeRef = useRef(0);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [muted, setMuted] = useState(false);
@@ -45,6 +46,7 @@ export default function YouTubePlayer({ currentVideo, playback, canControl, canA
     if (!canControl) return;
     const nextTimestamp = Math.min(Math.max(Number(timestamp) || 0, 0), duration || Number(timestamp) || 0);
     setProgress(nextTimestamp);
+    lastSeekTimeRef.current = Date.now();
     player.seekTo(nextTimestamp);
     onLocalEvent("seek-video", { timestamp: nextTimestamp });
   }
@@ -78,10 +80,15 @@ export default function YouTubePlayer({ currentVideo, playback, canControl, canA
 
     if (loadedVideoIdRef.current !== currentVideo.videoId) {
       loadedVideoIdRef.current = currentVideo.videoId;
+      lastSeekTimeRef.current = Date.now();
       setProgress(expected);
       player.load(currentVideo.videoId, expected, playback.isPlaying);
     } else {
-      if (drift > 2.5) player.seekTo(expected);
+      // Throttle drift seeking to avoid choppy stutters/replays while video is smoothly playing
+      if (drift > 3.0 && Date.now() - lastSeekTimeRef.current > 3000) {
+        lastSeekTimeRef.current = Date.now();
+        player.seekTo(expected);
+      }
       if (playback.isPlaying && !isPlayingOrBuffering) player.play();
       if (!playback.isPlaying && playerState !== 2) player.pause();
     }

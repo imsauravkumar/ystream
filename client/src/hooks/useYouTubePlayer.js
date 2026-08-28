@@ -98,5 +98,8 @@ export function useYouTubePlayer({ onPlay, onPause, onEnded, onReady }) {
     [load, play, pause, mute, unMute, isMuted, seekTo, getCurrentTime, getDuration, getState]
   );
 
-  return { containerRef, ready, ...controls };
+  return useMemo(
+    () => ({ containerRef, ready, ...controls }),
+    [containerRef, ready, controls]
+  );
 }

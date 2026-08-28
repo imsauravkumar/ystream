@@ -324,7 +324,9 @@ export default function Room() {
           />
         </div>
       </div>
-      <CopyrightBadge />
+      <div className="mt-8 flex justify-center pb-4">
+        <CopyrightBadge />
+      </div>
       <ConfirmDialog
         open={leaveDialogOpen}
         title="Leave this room?"
