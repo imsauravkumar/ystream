@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle, Laptop, ListMusic, MessageSquare, Play, Shield, Sparkles, Tv, Users, Zap } from "lucide-react";
+import { ArrowRight, Laptop, ListMusic, MessageSquare, Play, Shield, Sparkles, Users, Zap } from "lucide-react";
 import { Link, Navigate } from "react-router-dom";
 import BrandMark from "../components/BrandMark.jsx";
 import Button from "../components/Button.jsx";
@@ -244,7 +244,7 @@ export default function Landing() {
               </div>
               <h3 className="text-lg font-bold text-white">Real-Time Sync</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted">
-                Socket.io keeps the playback timestamp, play, and pause events synchronized across everyone's browsers in milliseconds. No manual alignment needed.
+                Socket.io keeps the playback timestamp, play, and pause events synchronized across everyone&apos;s browsers in milliseconds. No manual alignment needed.
               </p>
             </div>
 
@@ -322,7 +322,7 @@ export default function Landing() {
               </div>
               <h3 className="text-lg font-bold text-white">Create a Room</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted px-4">
-                Sign in, hit "Create Room", and get a unique party room code generated instantly.
+                Sign in, hit &quot;Create Room&quot;, and get a unique party room code generated instantly.
               </p>
             </div>
 
