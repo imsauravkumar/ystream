@@ -1,17 +1,25 @@
+import { motion } from "framer-motion";
 import { cn } from "../lib/utils.js";
 
 export default function Button({ className = "", variant = "primary", ...props }) {
   const variants = {
-    primary: "bg-brand text-zinc-950 shadow-[0_10px_28px_rgba(56,189,248,0.18)] hover:bg-sky-300",
-    danger: "bg-accent text-white shadow-[0_10px_28px_rgba(244,63,94,0.16)] hover:bg-rose-500",
-    ghost: "border border-zinc-800 bg-zinc-900 text-zinc-100 hover:border-sky-400/50 hover:bg-zinc-800",
-    subtle: "bg-zinc-800 text-zinc-100 hover:bg-zinc-700"
+    primary:
+      "bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-400 hover:to-rose-500 text-white font-semibold shadow-[0_0_20px_rgba(244,63,94,0.3)] border-0",
+    danger:
+      "bg-rose-950/60 border border-rose-500/30 text-rose-200 hover:bg-rose-900/80 hover:border-rose-500/50 shadow-sm",
+    ghost:
+      "border border-white/10 bg-white/[0.03] text-zinc-300 hover:border-white/20 hover:bg-white/[0.06] hover:text-white",
+    subtle:
+      "border border-white/5 bg-white/[0.04] text-zinc-200 hover:bg-white/[0.08]"
   };
 
   return (
-    <button
+    <motion.button
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ duration: 0.15 }}
       className={cn(
-        "inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-sky-300/40 disabled:cursor-not-allowed disabled:opacity-50",
+        "inline-flex min-h-10 items-center justify-center gap-2 rounded-xl px-4 text-xs sm:text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-rose-500/40 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100 cursor-pointer",
         variants[variant],
         className
       )}
@@ -19,3 +27,4 @@ export default function Button({ className = "", variant = "primary", ...props }
     />
   );
 }
+

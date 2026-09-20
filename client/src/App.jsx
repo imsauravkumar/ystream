@@ -4,6 +4,7 @@ import Auth from "./pages/Auth.jsx";
 import Home from "./pages/Home.jsx";
 import Room from "./pages/Room.jsx";
 import Landing from "./pages/Landing.jsx";
+import CursorGlow from "./components/CursorGlow.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
 
 function ProtectedRoute({ children }) {
@@ -33,6 +34,7 @@ function ScrollToTop() {
 export default function App() {
   return (
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <CursorGlow />
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Landing />} />

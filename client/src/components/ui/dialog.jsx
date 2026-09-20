@@ -71,7 +71,7 @@ export function DialogContent({ className = "", children, ...props }) {
         aria-labelledby={titleId}
         aria-modal="true"
         className={cn(
-          "fixed left-1/2 top-1/2 z-50 grid w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 gap-4 rounded-lg border border-zinc-800 bg-panel p-5 text-zinc-50 shadow-glow outline-none",
+          "fixed left-1/2 top-1/2 z-50 grid w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 gap-4 rounded-2xl border border-white/10 bg-zinc-950/95 p-6 text-zinc-50 shadow-2xl backdrop-blur-2xl outline-none",
           className
         )}
         role="dialog"
@@ -80,12 +80,12 @@ export function DialogContent({ className = "", children, ...props }) {
       >
         {children}
         <button
-          className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-md border border-zinc-800 bg-zinc-900 text-zinc-300 transition hover:bg-zinc-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-sky-300/40"
+          className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-zinc-400 transition hover:bg-white/10 hover:text-white focus:outline-none"
           type="button"
           title="Close"
           onClick={() => onOpenChange?.(false)}
         >
-          <X size={16} />
+          <X size={15} />
         </button>
       </div>
     </DialogPortal>

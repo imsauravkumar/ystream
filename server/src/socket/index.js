@@ -2,9 +2,10 @@ import { Server } from "socket.io";
 import Room from "../models/Room.js";
 import { verifySocketToken } from "../middleware/auth.js";
 import { normalizeRoomCode } from "../utils/roomCode.js";
-import { getClientOrigins } from "../config/cors.js";
+import { isOriginAllowed } from "../config/cors.js";
 
 const activeRooms = new Map();
+
 
 function publicUser(user) {
   return {
@@ -110,10 +111,17 @@ function nextPlayback({ isPlaying, timestamp }) {
 export function createSocketServer(httpServer) {
   const io = new Server(httpServer, {
     cors: {
-      origin: getClientOrigins(),
+      origin: (origin, callback) => {
+        if (isOriginAllowed(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error(`CORS blocked origin: ${origin}`));
+        }
+      },
       credentials: true
     }
   });
+
 
   io.use(verifySocketToken);
 

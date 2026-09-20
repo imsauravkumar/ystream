@@ -18,8 +18,8 @@ export default function YouTubePlayer({ currentVideo, playback, canControl, canA
   const [muted, setMuted] = useState(false);
   const player = useYouTubePlayer({
     onReady: onPlayerReady,
-    onPlay: () => {},
-    onPause: () => {},
+    onPlay: () => { },
+    onPause: () => { },
     onEnded: () => {
       if (canAutoAdvance) onNext();
     }
@@ -108,13 +108,15 @@ export default function YouTubePlayer({ currentVideo, playback, canControl, canA
 
   if (!currentVideo) {
     return (
-      <section className="grid aspect-video min-h-52 w-full max-h-[calc(100vh-11rem)] place-items-center rounded-xl border border-zinc-800 bg-zinc-950/90 text-center shadow-glow">
-        <div className="max-w-sm space-y-3 px-6">
-          <div className="mx-auto grid h-14 w-14 place-items-center rounded-full border border-zinc-800 bg-zinc-900 text-brand">
-            <Play size={24} />
+      <section className="grid aspect-video min-h-60 w-full max-h-[calc(100vh-12rem)] place-items-center rounded-3xl border border-white/10 bg-zinc-900/30 text-center backdrop-blur-xl shadow-2xl">
+        <div className="max-w-sm space-y-3.5 px-6">
+          <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl border border-rose-500/20 bg-rose-500/10 text-rose-400 shadow-[0_0_20px_rgba(244,63,94,0.15)]">
+            <Play size={24} className="ml-1" />
           </div>
-          <h2 className="text-xl font-black">Search for a video to begin</h2>
-          <p className="text-sm leading-6 text-muted">The first selected video becomes the shared room player for everyone.</p>
+          <h2 className="text-xl font-bold tracking-tight text-white">Search for a video to begin</h2>
+          <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+            The first selected video becomes the shared room player for everyone.
+          </p>
         </div>
       </section>
     );
@@ -122,22 +124,26 @@ export default function YouTubePlayer({ currentVideo, playback, canControl, canA
 
   return (
     <section className="min-w-0 space-y-3">
-      <div className="player-frame aspect-video w-full max-h-[calc(100vh-11rem)] overflow-hidden rounded-xl border border-zinc-800 bg-black shadow-glow">
+      <div className="player-frame aspect-video w-full max-h-[calc(100vh-12rem)] overflow-hidden rounded-3xl border border-white/10 bg-black shadow-2xl">
         <div ref={player.containerRef} className="h-full w-full" />
       </div>
-      <div className="rounded-xl border border-zinc-800 bg-panel/95 p-4">
+      <div className="rounded-2xl border border-white/10 bg-zinc-900/30 p-4 backdrop-blur-xl">
         <div className="space-y-4">
           <div className="min-w-0 text-center">
-            <h2 className="truncate text-lg font-black leading-tight">{currentVideo.title}</h2>
-            <p className="mt-1 truncate text-sm text-muted">{currentVideo.channelTitle}</p>
+            <h2 className="truncate text-base sm:text-lg font-bold text-white tracking-tight leading-tight">
+              {currentVideo.title}
+            </h2>
+            <p className="mt-0.5 truncate text-xs text-zinc-400 font-medium">
+              {currentVideo.channelTitle}
+            </p>
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-2">
-            <Button className="h-11 w-11 px-0" variant="ghost" onClick={toggleMute} title={muted ? "Unmute" : "Mute"}>
-              {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+            <Button className="h-10 w-10 px-0 rounded-xl" variant="ghost" onClick={toggleMute} title={muted ? "Unmute" : "Mute"}>
+              {muted ? <VolumeX size={16} /> : <Volume2 size={16} />}
             </Button>
-            <Button className="h-11 w-11 px-0" variant="ghost" disabled={!canControl} onClick={() => seekToTimestamp(0)} title="Restart">
-              <RotateCcw size={18} />
+            <Button className="h-10 w-10 px-0 rounded-xl" variant="ghost" disabled={!canControl} onClick={() => seekToTimestamp(0)} title="Restart">
+              <RotateCcw size={16} />
             </Button>
             <Button className="h-11 w-11 px-0" variant="ghost" disabled={!canControl} onClick={onPrevious} title="Previous song">
               <SkipBack size={18} />

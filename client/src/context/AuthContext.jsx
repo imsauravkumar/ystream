@@ -15,7 +15,13 @@ export function AuthProvider({ children }) {
     });
   }, []);
 
-  const value = useMemo(() => ({ user, loading }), [user, loading]);
+  const updateName = async (newName) => {
+    if (!auth.currentUser) return;
+    await updateProfile(auth.currentUser, { displayName: newName.trim() });
+    setUser({ ...auth.currentUser, displayName: newName.trim() });
+  };
+
+  const value = useMemo(() => ({ user, loading, updateName }), [user, loading]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -6,6 +6,14 @@
     <meta name="theme-color" content="#09090b" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     
+    <script>
+      try {
+        if (localStorage.getItem("ystream-theme") === "light") {
+          document.documentElement.classList.add("light");
+        }
+      } catch (e) {}
+    </script>
+    
     <!-- Primary SEO Tags -->
     <title>Ystream - Watch YouTube Together in Perfect Sync</title>
     <meta name="title" content="Ystream - Watch YouTube Together in Perfect Sync" />

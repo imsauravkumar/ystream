@@ -1,4 +1,4 @@
-import { LogOut, Wifi, WifiOff } from "lucide-react";
+import { Check, Copy, LogOut, Radio, Wifi, WifiOff } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
@@ -31,12 +31,19 @@ export default function Room() {
   const [currentVideo, setCurrentVideo] = useState(null);
   const [queueActionPending, setQueueActionPending] = useState(false);
   const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
   const playerRef = useRef(null);
   const profile = useMemo(() => getUserProfile(user), [user]);
   const isHost = room?.hostUid === user?.uid;
   const canControlPlayback = isHost || room?.playbackControllerUids?.includes(user?.uid);
 
   useEffect(() => {
+    if (!roomCode || roomCode.toLowerCase() === "undefined" || roomCode.toLowerCase() === "null") {
+      toast.error("Invalid room code. Returning to dashboard.");
+      navigate("/dashboard", { replace: true });
+      return;
+    }
+
     let alive = true;
     getRoom(roomCode)
       .then(({ data }) => {
@@ -50,9 +57,13 @@ export default function Room() {
     return () => {
       alive = false;
     };
-  }, [roomCode]);
+  }, [roomCode, navigate]);
 
   useEffect(() => {
+    if (!roomCode || roomCode.toLowerCase() === "undefined" || roomCode.toLowerCase() === "null") {
+      return;
+    }
+
     let nextSocket;
     let alive = true;
 
@@ -248,6 +259,14 @@ export default function Room() {
     socket?.emit("update-playback-permission", { roomCode, targetUid, allowed });
   }
 
+  function handleCopyRoomCode() {
+    const code = room?.code || roomCode;
+    navigator.clipboard.writeText(code);
+    setCopied(true);
+    toast.success(`Room code ${code} copied!`);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
   function leaveRoom() {
     setLeaveDialogOpen(true);
   }
@@ -258,35 +277,61 @@ export default function Room() {
   }
 
   return (
-    <main className="min-h-screen bg-ink px-3 py-4 text-zinc-50 sm:px-4 lg:px-6">
-      <div className="mx-auto flex w-full max-w-[92rem] flex-col gap-4">
-        <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-xl border border-zinc-800/80 bg-panel/90 px-2.5 py-2.5 shadow-glow backdrop-blur sm:gap-3 sm:px-4 sm:py-3">
-          <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
-            <BrandMark className="h-10 w-10 shrink-0 sm:h-11 sm:w-11" />
-            <div className="min-w-0">
-              <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
-                <h1 className="shrink-0 text-lg font-black leading-tight sm:text-xl">Ystream</h1>
-                <span className="min-w-0 truncate rounded-full border border-zinc-800 bg-zinc-950 px-2 py-1 text-[0.65rem] font-bold tracking-[0.12em] text-zinc-200 sm:px-2.5 sm:text-xs sm:tracking-[0.18em]">
-                  {room?.code || roomCode}
-                </span>
-              </div>
-              <p className="mt-1 flex items-center gap-1.5 text-xs text-muted sm:gap-2 sm:text-sm">
-                {connected ? <Wifi size={15} className="text-brand" /> : <WifiOff size={15} className="text-rose-400" />}
-                {connected ? "Live sync connected" : "Reconnecting"}
-              </p>
+    <main className="relative min-h-screen w-full overflow-x-hidden bg-[#09090b] px-3 py-4 text-zinc-100 sm:px-6 lg:px-8 font-sans">
+      {/* Ambient background glow */}
+      <div className="pointer-events-none fixed inset-0 z-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(244,63,94,0.1),rgba(99,102,241,0.05),transparent)]" />
+
+      <div className="relative z-10 mx-auto flex w-full max-w-[94rem] flex-col gap-4">
+        {/* Header */}
+        <header className="mx-auto flex w-full items-center justify-between rounded-2xl border border-white/10 bg-zinc-950/80 px-4 py-3 backdrop-blur-xl sm:px-6">
+          <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+            <BrandMark className="h-8 w-8 shrink-0 text-white" />
+            <div className="flex min-w-0 items-center gap-2">
+              <span className="text-lg font-bold tracking-tight text-white">Ystream</span>
+
+              {/* Room Code Badge */}
+              <button
+                onClick={handleCopyRoomCode}
+                className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-2.5 py-1 font-mono text-xs font-semibold tracking-widest text-white/90 hover:bg-white/10 hover:border-white/20 transition-all"
+                title="Click to copy room code"
+              >
+                <span>{room?.code || roomCode}</span>
+                {copied ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} className="text-zinc-400" />}
+              </button>
             </div>
           </div>
 
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 items-center gap-3">
+            {/* Status indicator */}
+            <div className="hidden sm:inline-flex items-center gap-1.5 text-xs text-zinc-400">
+              {connected ? (
+                <>
+                  <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
+                  <span className="text-zinc-300">Synced</span>
+                </>
+              ) : (
+                <>
+                  <span className="h-2 w-2 rounded-full bg-rose-400 animate-ping" />
+                  <span className="text-zinc-400">Connecting</span>
+                </>
+              )}
+            </div>
+
             <ThemeToggle />
-            <Button className="h-11 w-11 px-0 sm:w-auto sm:min-w-[5.75rem] sm:px-4" variant="ghost" title="Leave room" onClick={leaveRoom}>
-              <LogOut size={18} />
+            <button
+              className="flex h-9 items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3 text-xs font-medium text-zinc-400 transition-all hover:border-rose-500/30 hover:bg-rose-500/10 hover:text-rose-300"
+              title="Leave room"
+              onClick={leaveRoom}
+            >
+              <LogOut size={13} />
               <span className="hidden sm:inline">Leave</span>
-            </Button>
+            </button>
           </div>
         </header>
 
-        <div className="grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1fr)_24rem]">
+        {/* Main Watch Theater Grid */}
+        <div className="grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1fr)_25rem]">
+          {/* Main Stage (Player & Search) */}
           <div className="min-w-0 space-y-4">
             <YouTubePlayer
               currentVideo={currentVideo}
@@ -300,14 +345,23 @@ export default function Room() {
                 playerRef.current = player;
               }}
             />
+
             {!canControlPlayback && (
-              <div className="rounded-lg border border-zinc-800 bg-zinc-950/80 px-4 py-3 text-sm text-muted">
-                The host has not allowed you to add, play, or control songs yet.
+              <div className="rounded-2xl border border-white/10 bg-zinc-900/30 px-4 py-3 text-xs text-zinc-400 flex items-center gap-2 backdrop-blur-md">
+                <Radio size={14} className="text-rose-400" />
+                <span>The host is currently managing playback for this room.</span>
               </div>
             )}
-            <SearchPanel hasCurrentVideo={Boolean(currentVideo)} adding={queueActionPending} canAdd={canControlPlayback} onAdd={addToQueue} />
+
+            <SearchPanel
+              hasCurrentVideo={Boolean(currentVideo)}
+              adding={queueActionPending}
+              canAdd={canControlPlayback}
+              onAdd={addToQueue}
+            />
           </div>
 
+          {/* Sidebar (Room Stats, Members, Queue, Chat) */}
           <Sidebar
             room={room}
             currentUserUid={user?.uid}
@@ -324,15 +378,19 @@ export default function Room() {
           />
         </div>
       </div>
-      <div className="mt-8 flex justify-center pb-4">
+
+      {/* Footer */}
+      <footer className="relative z-10 mt-8 flex justify-center pb-6">
         <CopyrightBadge />
-      </div>
+      </footer>
+
+      {/* Confirmation Modal */}
       <ConfirmDialog
         open={leaveDialogOpen}
-        title="Leave this room?"
-        message="You will disconnect from the synced session and return to your dashboard."
-        confirmLabel="Leave room"
-        cancelLabel="Stay"
+        title="Leave watch room?"
+        message="You will disconnect from this synchronized streaming session and return to your dashboard."
+        confirmLabel="Leave Room"
+        cancelLabel="Stay in Room"
         onCancel={() => setLeaveDialogOpen(false)}
         onConfirm={confirmLeaveRoom}
       />

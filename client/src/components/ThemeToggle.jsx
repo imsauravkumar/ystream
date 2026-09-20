@@ -11,12 +11,12 @@ export default function ThemeToggle() {
 
   return (
     <button
-      className="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-zinc-800 bg-zinc-900 text-zinc-100 transition hover:bg-zinc-800"
+      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-zinc-400 transition-all hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
       onClick={() => setLight((value) => !value)}
       title="Toggle theme"
       type="button"
     >
-      {light ? <Sun size={18} /> : <Moon size={18} />}
+      {light ? <Sun size={16} /> : <Moon size={16} />}
     </button>
   );
 }

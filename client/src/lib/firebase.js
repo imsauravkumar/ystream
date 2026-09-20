@@ -50,3 +50,9 @@ export async function signInAsGuest(name) {
 export function logout() {
   return signOut(auth);
 }
+
+export async function updateUserProfileName(name) {
+  if (!auth.currentUser) throw new Error("No authenticated user");
+  await updateProfile(auth.currentUser, { displayName: name.trim() });
+  return auth.currentUser;
+}
