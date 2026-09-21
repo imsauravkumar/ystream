@@ -1,9 +1,8 @@
-import { Check, Copy, LogOut, Radio, Wifi, WifiOff } from "lucide-react";
+import { Check, Copy, LogOut, Radio } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import BrandMark from "../components/BrandMark.jsx";
-import Button from "../components/Button.jsx";
 import ConfirmDialog from "../components/ConfirmDialog.jsx";
 import CopyrightBadge from "../components/CopyrightBadge.jsx";
 import SearchPanel from "../components/SearchPanel.jsx";
