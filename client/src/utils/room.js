@@ -9,10 +9,19 @@ export function normalizeRoomCode(value) {
 }
 
 export function getUserProfile(user) {
+  if (!user) {
+    return {
+      uid: "",
+      name: "Guest",
+      photoURL: "",
+      isAnonymous: true
+    };
+  }
+
   return {
-    uid: user.uid,
-    name: user.displayName || user.email || `Guest ${user.uid.slice(0, 5)}`,
+    uid: user.uid || "",
+    name: user.displayName || user.email || `Guest ${(user.uid || "").slice(0, 5)}`,
     photoURL: user.photoURL || "",
-    isAnonymous: user.isAnonymous
+    isAnonymous: Boolean(user.isAnonymous)
   };
 }

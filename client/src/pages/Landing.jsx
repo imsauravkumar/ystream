@@ -1,10 +1,9 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Flame, Headphones, Laptop, ListMusic, MessageSquare, Music2, Play, Radio, Shield, Users, Zap } from "lucide-react";
+import { ArrowRight, Laptop, ListMusic, MessageSquare, Play, Shield, Users, Zap } from "lucide-react";
 import { Link, Navigate } from "react-router-dom";
 import BrandMark from "../components/BrandMark.jsx";
 import Button from "../components/Button.jsx";
 import CopyrightBadge from "../components/CopyrightBadge.jsx";
-import ThemeToggle from "../components/ThemeToggle.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 
 export default function Landing() {
@@ -68,7 +67,6 @@ export default function Landing() {
 
           {/* Right Controls */}
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-            <ThemeToggle />
             <Link to="/auth?mode=login">
               <Button variant="ghost" className="h-9 px-3.5 text-xs font-medium text-zinc-300 hover:text-white sm:h-9 sm:px-4">
                 Login

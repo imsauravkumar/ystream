@@ -8,7 +8,6 @@ import ConfirmDialog from "../components/ConfirmDialog.jsx";
 import CopyrightBadge from "../components/CopyrightBadge.jsx";
 import SearchPanel from "../components/SearchPanel.jsx";
 import Sidebar from "../components/Sidebar.jsx";
-import ThemeToggle from "../components/ThemeToggle.jsx";
 import YouTubePlayer from "../components/YouTubePlayer.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { getBackendConfigMessage } from "../lib/config.js";
@@ -316,8 +315,6 @@ export default function Room() {
                 </>
               )}
             </div>
-
-            <ThemeToggle />
             <button
               className="flex h-9 items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3 text-xs font-medium text-zinc-400 transition-all hover:border-rose-500/30 hover:bg-rose-500/10 hover:text-rose-300"
               title="Leave room"

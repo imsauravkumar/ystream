@@ -6,7 +6,6 @@ import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import BrandMark from "../components/BrandMark.jsx";
 import Button from "../components/Button.jsx";
 import CopyrightBadge from "../components/CopyrightBadge.jsx";
-import ThemeToggle from "../components/ThemeToggle.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { loginWithEmail, registerWithEmail, signInWithGoogle } from "../lib/firebase.js";
 import { getReadableFirebaseError } from "../utils/firebaseErrors.js";
@@ -89,9 +88,7 @@ export default function Auth() {
             </div>
           </Link>
 
-          <div className="flex items-center gap-3">
-            <ThemeToggle />
-          </div>
+
         </nav>
       </header>
 

@@ -7,7 +7,6 @@ import BrandMark from "../components/BrandMark.jsx";
 import Button from "../components/Button.jsx";
 import ConfirmDialog from "../components/ConfirmDialog.jsx";
 import CopyrightBadge from "../components/CopyrightBadge.jsx";
-import ThemeToggle from "../components/ThemeToggle.jsx";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../components/ui/dialog.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { getBackendConfigMessage } from "../lib/config.js";
@@ -119,8 +118,6 @@ export default function Home() {
           <BrandMark showBadge={false} />
 
           <div className="flex items-center gap-3">
-            <ThemeToggle />
-
             {user && (
               <div className="flex items-center gap-2">
                 <button
@@ -206,7 +203,7 @@ export default function Home() {
                   Host a Watch Room
                 </h2>
                 <p className="mt-1 text-xs text-zinc-400 leading-relaxed">
-                  Generate a private room instantly. You'll have host privileges to manage playback, permissions, and the shared playlist queue.
+                  Generate a private room instantly. You&apos;ll have host privileges to manage playback, permissions, and the shared playlist queue.
                 </p>
               </div>
 

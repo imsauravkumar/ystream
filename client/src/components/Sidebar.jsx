@@ -1,4 +1,4 @@
-import { Crown, KeyRound, ListMusic, MessageSquare, Send, ShieldCheck, Smile, Users, X } from "lucide-react";
+import { Crown, KeyRound, ListMusic, MessageSquare, Send, ShieldCheck, Smile, Users } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Avatar from "./Avatar.jsx";
 

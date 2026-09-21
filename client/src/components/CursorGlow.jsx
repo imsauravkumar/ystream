@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 
 export default function CursorGlow() {
   const [visible, setVisible] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true);
   const [isClicking, setIsClicking] = useState(false);
 
   const auraRef = useRef(null);
@@ -10,24 +9,6 @@ export default function CursorGlow() {
   const mousePos = useRef({ x: -200, y: -200 });
   const currentAura = useRef({ x: -200, y: -200 });
   const rafId = useRef(null);
-
-  // Check dark mode state and respond to theme toggles
-  useEffect(() => {
-    const checkTheme = () => {
-      const isDark = !document.documentElement.classList.contains("light");
-      setIsDarkMode(isDark);
-    };
-
-    checkTheme();
-
-    const observer = new MutationObserver(checkTheme);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"]
-    });
-
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     // Only enable on desktop/laptop fine pointers
@@ -61,7 +42,7 @@ export default function CursorGlow() {
         auraRef.current.style.transform = `translate3d(${currentAura.current.x - 250}px, ${currentAura.current.y - 250}px, 0)`;
       }
 
-      rafId.current = requestAnimationFrame(animate);
+      rafId.current = window.requestAnimationFrame(animate);
     };
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
@@ -70,7 +51,7 @@ export default function CursorGlow() {
     document.documentElement.addEventListener("mouseleave", handleMouseLeave);
     document.documentElement.addEventListener("mouseenter", handleMouseEnter);
 
-    rafId.current = requestAnimationFrame(animate);
+    rafId.current = window.requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
@@ -78,12 +59,9 @@ export default function CursorGlow() {
       window.removeEventListener("mouseup", handleMouseUp);
       document.documentElement.removeEventListener("mouseleave", handleMouseLeave);
       document.documentElement.removeEventListener("mouseenter", handleMouseEnter);
-      if (rafId.current) cancelAnimationFrame(rafId.current);
+      if (rafId.current) window.cancelAnimationFrame(rafId.current);
     };
   }, [visible]);
-
-  // Completely hidden in light mode
-  if (!isDarkMode) return null;
 
   return (
     <div

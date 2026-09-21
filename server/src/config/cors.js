@@ -29,8 +29,8 @@ export function isOriginAllowed(origin) {
 
   if (allowed.includes(normalized)) return true;
 
-  // Allow Vercel preview deployments if main Vercel app is allowed
-  if (normalized.endsWith(".vercel.app") || normalized.endsWith(".onrender.com")) {
+  // Allow specific project preview deployments (e.g. ystream-*.vercel.app)
+  if (/^https:\/\/ystream(-[a-z0-9-]+)?\.vercel\.app$/i.test(normalized)) {
     return true;
   }
 

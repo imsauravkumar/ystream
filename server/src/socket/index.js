@@ -9,9 +9,21 @@ const activeRooms = new Map();
 
 function publicUser(user) {
   return {
-    uid: user.uid,
-    name: user.name || user.email || `Guest ${user.uid.slice(0, 5)}`,
-    photoURL: user.picture || ""
+    uid: user?.uid || "",
+    name: String(user?.name || user?.email || `Guest ${(user?.uid || "").slice(0, 5)}`).slice(0, 50),
+    photoURL: String(user?.picture || user?.photoURL || "").slice(0, 500)
+  };
+}
+
+function sanitizeVideoItem(video, user) {
+  if (!video || typeof video !== "object" || !video.videoId) return null;
+  return {
+    videoId: String(video.videoId).trim().slice(0, 32),
+    title: String(video.title || "Untitled Video").trim().slice(0, 200),
+    channelTitle: String(video.channelTitle || "").trim().slice(0, 100),
+    thumbnail: String(video.thumbnail || "").trim().slice(0, 500),
+    duration: String(video.duration || "").trim().slice(0, 30),
+    addedBy: publicUser(user)
   };
 }
 
@@ -202,12 +214,13 @@ export function createSocketServer(httpServer) {
       try {
         const code = normalizeRoomCode(roomCode);
         const room = await Room.findOne({ code });
-        if (!room || !video?.videoId) return;
+        const sanitized = sanitizeVideoItem(video, socket.user);
+        if (!room || !sanitized) return;
         assertPlaybackControl(socket, room);
         if (room.currentVideo) {
           room.history = [...(room.history || []), room.currentVideo].slice(-25);
         }
-        room.currentVideo = { ...video, addedBy: publicUser(socket.user) };
+        room.currentVideo = sanitized;
         room.playback = nextPlayback({ isPlaying: true, timestamp: 0 });
         await room.save();
         io.to(code).emit("sync-state", { playback: room.playback, currentVideo: room.currentVideo });
@@ -225,14 +238,17 @@ export function createSocketServer(httpServer) {
           return;
         }
 
-        if (action === "add" && video?.videoId) {
+        if (action === "add") {
           assertPlaybackControl(socket, room);
-          const queuedVideo = { ...video, addedBy: publicUser(socket.user) };
+          const sanitized = sanitizeVideoItem(video, socket.user);
+          if (!sanitized) {
+            throw new Error("Invalid video item data.");
+          }
           if (!room.currentVideo) {
-            room.currentVideo = queuedVideo;
+            room.currentVideo = sanitized;
             room.playback = nextPlayback({ isPlaying: true, timestamp: 0 });
           } else {
-            room.queue.push(queuedVideo);
+            room.queue.push(sanitized);
           }
         }
 
